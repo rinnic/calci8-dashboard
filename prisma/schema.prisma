@@ -9,3 +9,39 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  email     String?
+  firstName String?
+  lastName  String?
+  League    League[]
+}
+
+model League {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  admin       User          @relation(fields: [adminId], references: [id])
+  adminId     String
+  Competition Competition[]
+}
+
+model Competition {
+  id       String @id @default(uuid())
+  name     String
+  league   League @relation(fields: [leagueId], references: [id])
+  leagueId String
+  Team     Team[]
+}
+
+model Team {
+  id                String      @id @default(uuid())
+  name              String
+  presidentFullName String
+  competition       Competition @relation(fields: [competitionId], references: [id])
+  competitionId     String
+}
+
+
