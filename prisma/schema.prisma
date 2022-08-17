@@ -29,11 +29,13 @@ model League {
 }
 
 model Competition {
-  id       String @id @default(uuid())
+  id       String   @id @default(uuid())
   name     String
-  league   League @relation(fields: [leagueId], references: [id])
+  league   League   @relation(fields: [leagueId], references: [id])
   leagueId String
   Team     Team[]
+  Record   Record[]
+  Round    Round[]
 }
 
 model Team {
@@ -42,6 +44,26 @@ model Team {
   presidentFullName String
   competition       Competition @relation(fields: [competitionId], references: [id])
   competitionId     String
+  Record            Record[]
+  Round             Round[]
 }
 
+model Record {
+  id            String      @id @default(uuid())
+  name          String
+  value         String
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  competitionId String
+  team          Team        @relation(fields: [teamId], references: [id])
+  teamId        String
+}
 
+model Round {
+  id            String      @id @default(uuid())
+  name          String
+  number        Int
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  competitionId String
+  team          Team        @relation(fields: [teamId], references: [id])
+  teamId        String
+}
