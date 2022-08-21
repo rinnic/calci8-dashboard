@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const handler = async (req, res) => {
   const { username, password } = req.body;
@@ -20,7 +21,11 @@ const handler = async (req, res) => {
   if (!passwordComparison) {
     res.status(401).json({ message: "unhautorized" });
   }
-  res.status(200).json({ data: existingUser });
+
+  const jwtToken = jwt.sign({ username }, process.env.JWT_KEY, {
+    expiresIn: "30m",
+  });
+  res.status(200).json({ data: existingUser, tokenData: { token: jwtToken } });
 };
 
 export default handler;
