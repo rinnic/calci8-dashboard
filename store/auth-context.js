@@ -13,14 +13,14 @@ export const AuthProvider = (props) => {
   const loginHandler = (token, expirationTime) => {
     console.log(token, expirationTime)
     localStorage.setItem("token", token);
-    localStorage.setItem("expirationTime", expirationTime);
+    localStorage.setItem("expiresIn", expirationTime);
     setToken(token);
   };
 
   const logoutHandler = () => {
     setToken("");
     localStorage.removeItem("token");
-    localStorage.removeItem("token");
+    localStorage.removeItem("expiresIn");
   };
 
   const ctxValue = {
