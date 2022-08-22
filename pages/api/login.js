@@ -25,7 +25,7 @@ const handler = async (req, res) => {
   const jwtToken = jwt.sign({ username }, process.env.JWT_KEY, {
     expiresIn: "30m",
   });
-  res.status(200).json({ data: existingUser, tokenData: { token: jwtToken } });
+  res.status(200).json({ data: existingUser, tokenData: { token: jwtToken, expiresIn: "5000" } });
 };
 
 export default handler;

@@ -32,10 +32,10 @@ const useHttp = (request, startWithPending = false) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const request = async () => {
+  const makeRequest = async (data) => {
     dispatch({ type: "LOADING" });
     try {
-      const response = await request();
+      const response = await request(data);
       const json = await response.json();
       dispatch({ type: "SUCCESS", data: json });
     } catch (error) {
@@ -43,14 +43,14 @@ const useHttp = (request, startWithPending = false) => {
     }
   };
 
-  return {
-    request,
-    data: {
+  return [
+    makeRequest,
+    {
       pending: state.pending,
       data: state.data,
       error: state.error,
     },
-  };
+  ];
 };
 
 export default useHttp;

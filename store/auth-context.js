@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 const AuthContext = React.createContext({
   isLoggedIn: false,
   token: "",
@@ -5,10 +7,11 @@ const AuthContext = React.createContext({
   logout: () => {},
 });
 
-const AuthProvider = (props) => {
+export const AuthProvider = (props) => {
   const [token, setToken] = useState("");
 
   const loginHandler = (token, expirationTime) => {
+    console.log(token, expirationTime)
     localStorage.setItem("token", token);
     localStorage.setItem("expirationTime", expirationTime);
     setToken(token);
@@ -29,3 +32,6 @@ const AuthProvider = (props) => {
 
   return <AuthContext.Provider value={ctxValue}>{props.children}</AuthContext.Provider>;
 };
+
+export default AuthContext
+
