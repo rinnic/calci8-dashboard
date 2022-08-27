@@ -11,7 +11,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-       Molto bene
+        Landing page
       </main>
 
      
