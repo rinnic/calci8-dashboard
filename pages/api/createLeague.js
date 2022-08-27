@@ -18,6 +18,9 @@ const handler = async (req, res) => {
       username: username,
     },
   });
+  if (!admin) {
+    res.status(400).json({ message: "invalid admin id" });
+  }
 
   const league = await prisma.League.create({
     data: {
