@@ -1,10 +1,8 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../../prisma/client";
 
-
 const handler = async (req, res) => {
   const { username, password, firstName, lastName, email } = req.body;
-  console.log(req.body);
 
   const existingUser = await prisma.User.findFirst({
     where: { username: username },

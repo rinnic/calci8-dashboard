@@ -1,28 +1,31 @@
 import { prisma } from "../../prisma/client";
-import bcrypt from "bcrypt";
 
 const handler = async (req, res) => {
-  const { username, password, firstName, lastName, email } = req.body;
-  console.log(req.body);
+  const { leagueName, username } = req.body;
 
-  const existingUser = await prisma.User.findFirst({
-    where: { username: username },
+  const existingLeague = await prisma.League.findFirst({
+    where: { name: leagueName },
   });
-  if (existingUser) {
+  if (existingLeague) {
     // 400 error status codes are for client errors, this is not! It's just a coincidence
     // it's common to use a 200 OK with a flag in the body (ok in this case) setted to false
-    res.status(200).json({ ok: false, message: "username already registered" });
+    res.status(200).json({ ok: false, message: "league name already taken" });
   }
-  const salt = await bcrypt.genSalt(10);
-  const encodedPassword = await bcrypt.hash(password, salt);
 
-  const user = await prisma.User.create({
-    data: {
-      ...req.body,
-      password: encodedPassword,
+  //get admin data (I need the id as foreign key)
+  const admin = await prisma.user.findFirst({
+    where: {
+      username: username,
     },
   });
-  res.status(200).json({ ok: true, message: "User created", data: user });
+
+  const league = await prisma.League.create({
+    data: {
+      name: leagueName,
+      adminId: admin.id,
+    },
+  });
+  res.status(200).json({ ok: true, message: "League created", data: league });
 };
 
 export default handler;
