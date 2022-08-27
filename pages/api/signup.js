@@ -23,7 +23,7 @@ const handler = async (req, res) => {
       password: encodedPassword,
     },
   });
-  res.status(200).json({ message: "User created", data: user });
+  res.status(200).json({ ok: true, message: "User created", data: user });
 };
 
 export default handler;

@@ -18,7 +18,6 @@ const Navigation = (props) => {
   const router = useRouter();
 
   const loginHandler = () => {
-    console.log("aaa");
     router.push("/login");
   };
 

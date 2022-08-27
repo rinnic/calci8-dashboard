@@ -1,34 +1,37 @@
 import { Box, TextField, Button } from "@mui/material";
-import { login } from "../../lib/api";
+import { signup } from "../../lib/api";
 import useHttp from "../../hooks/use-http";
-import AuthContext from "../../store/auth-context";
-import { useContext, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
-const Login = (props) => {
-  const [loginRequest, loginData] = useHttp(login);
-  const authCtx = useContext(AuthContext);
+const Signup = (props) => {
+  const [signupRequest, signupData] = useHttp(signup);
   const router = useRouter();
 
   const username = useRef();
   const password = useRef();
+  const confirmPassword = useRef();
 
   useEffect(() => {
-    if (!loginData.error && !loginData.pending && loginData.data) {
-      console.log(loginData.data.tokenData.token)
-      authCtx.login(loginData.data.tokenData.token, loginData.data.tokenData.expiresIn);
-      router.push("/home");
+    if (!signupData.error && !signupData.pending && signupData.data) {
+      if(!signupData.data.ok) {
+        console.log("Username already taken!");
+      }
+      router.push("/login");
     }
-  }, [loginData.error, loginData.pending, loginData.data]);
+  }, [signupData.error, signupData.pending, signupData.data]);
 
-  const loginHandler = async (event) => {
+  const signupHandler = async (event) => {
     event.preventDefault();
-    await loginRequest({
+    await signupRequest({
       username: username.current.value,
       password: password.current.value,
+
     });
-    console.log(loginData)
+    console.log(signupData)
   };
+
+  
 
   return (
     <Box
@@ -42,7 +45,7 @@ const Login = (props) => {
         padding: "2rem",
       }}
       component="form"
-      onSubmit={loginHandler}
+      onSubmit={signupHandler}
     >
       <TextField id="username" label="username*" inputRef={username} />
       <TextField
@@ -51,8 +54,14 @@ const Login = (props) => {
         label="password*"
         inputRef={password}
       />
+      <TextField
+        id="consfirmPassword"
+        type="consfirmPassword"
+        label="confirm password*"
+        inputRef={confirmPassword}
+      />
       <Button
-        id="login"
+        id="signup"
         type="submit"
         variant="contained"
         sx={{ backgroundColor: "rgb(0, 99, 71)" }}
@@ -63,4 +72,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Signup;
