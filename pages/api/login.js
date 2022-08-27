@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { prisma } from "../../prisma/client";
 
 const handler = async (req, res) => {
   const { username, password } = req.body;
-  const prisma = new PrismaClient();
 
   const existingUser = await prisma.User.findFirst({
     where: { username: username },
@@ -25,6 +25,7 @@ const handler = async (req, res) => {
   const jwtToken = jwt.sign({ username }, process.env.JWT_KEY, {
     expiresIn: "30m",
   });
+  console.log(jwtToken)
   res.status(200).json({ data: existingUser, tokenData: { token: jwtToken, expiresIn: "5000" } });
 };
 

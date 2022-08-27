@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
 import { prisma } from "../../prisma/client";
-
+import bcrypt from "bcrypt";
 
 const handler = async (req, res) => {
   const { username, password, firstName, lastName, email } = req.body;
