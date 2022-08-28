@@ -1,23 +1,7 @@
 import { prisma } from "../../prisma/client";
-import jwt from "jsonwebtoken";
+import authenticate from "../../lib/middleware";
 
 const handler = async (req, res) => {
-  const authHeader = req.headers["authorization"];
-  console.log(authHeader);
-  const token = authHeader && authHeader.split(" ")[1];
-  let username;
-  if (!token) {
-    res.status(401).json({ message: "token not provided" });
-    return;
-  } else {
-    try {
-      const payload = jwt.verify(token, process.env.JWT_KEY);
-      username = payload.username;
-    } catch (error) {
-      res.status(403).json({ message: "Token not valid or not provided" });
-      return;
-    }
-  }
   const { leagueName } = req.body;
 
   const existingLeague = await prisma.League.findFirst({
@@ -33,7 +17,7 @@ const handler = async (req, res) => {
   //get admin data (I need the id as foreign key)
   const admin = await prisma.user.findFirst({
     where: {
-      username: username,
+      username: req.username,
     },
   });
   if (!admin) {
@@ -49,4 +33,4 @@ const handler = async (req, res) => {
   res.status(200).json({ ok: true, message: "League created", data: league });
 };
 
-export default handler;
+export default authenticate(handler);
