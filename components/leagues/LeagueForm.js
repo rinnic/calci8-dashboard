@@ -1,4 +1,3 @@
-import { OnDeviceTrainingTwoTone } from "@mui/icons-material";
 import { Box, TextField, Button } from "@mui/material";
 import { useRef, useContext } from "react";
 import AuthContext from "../../store/auth-context";
